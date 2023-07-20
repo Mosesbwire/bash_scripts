@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+#shorten and automate git workflows
+
+args="$#"
+n=0
+
+
+if [ $args -eq 0 ]
+	then
+		git status
+		exit 0
+fi
+
+case "$1" in
+	"i")
+		git init
+		;;
+	"a")
+		git add .
+		;;
+	"f")
+		
+		for var in "$@"
+		do
+			if [ "$n" != 0 ]; then
+				git add "$var"
+			fi
+			let "n += 1"
+		done
+
+		;;
+	"c")
+		echo "Enter commit message: "
+		read message
+		git commit -m "$message"
+		;;
+	"p")
+		if [ "$args" -eq 3 ]; then
+			git push "$2" "$3"
+		else
+			git push
+		fi
+		;;
+	"acp")
+		echo "Enter commit message: "
+		read message
+		git add .
+		git commit -m "$message"
+		git push
+		;;
+	"afp")
+		echo "Enter commit message: "
+		read message
+		for var in "$@"
+		do
+			if [ "$n" != 0 ]; then
+				git add "$var"
+			fi
+			let "n += 1"
+		done
+
+		git commit -m "$message"
+		git push
+		;;
+	"ac")
+		echo "Enter commit message: "
+		read message
+		git add .
+		git commit -m "$message"
+		;;
+	"fc")
+		echo "Enter commit message: "
+		read message
+		for var in "$@"
+		do
+			if [ "$n" != 0]; then
+				git add "$var"
+			fi
+			let "n += 1"
+		done
+		git commit -m "$message"
+		;;
+	*)
+		echo "unknow command"
+		;;
+esac
+
